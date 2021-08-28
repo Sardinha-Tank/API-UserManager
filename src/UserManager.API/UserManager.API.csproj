@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <UserSecretsId>48f86129-f97f-4258-9d66-a771a9894d81</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="automapper" Version="10.1.1" />
+    <PackageReference Include="Azure.Identity" Version="1.4.1" />
+    <PackageReference Include="Azure.Security.KeyVault.Secrets" Version="4.2.0" />
+    <PackageReference Include="EscNet" Version="1.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.9" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="5.0.9" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.AzureKeyVault" Version="3.1.18" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.KeyPerFile" Version="5.0.9" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\UserManager.Domain\UserManager.Domain.csproj" />
+    <ProjectReference Include="..\UserManager.Services\UserManager.Services.csproj" />
+    <ProjectReference Include="..\UserManager.Infra\UserManager.Infra.csproj" />
+    <ProjectReference Include="..\UserManager.Core\UserManager.Core.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,39 @@
+version: "3.8"
+
+volumes: 
+    UserManagerDb:
+
+networks: 
+    dbNET:
+    appNET:
+
+services: 
+
+    mysql:
+        image: "mysql:8.0"
+        container_name: mysql
+        ports: 
+            - "3307:3306"
+        volumes: 
+            - UserManagerDb:/var/lib/mysql
+        networks: 
+            - dbNET
+        environment: 
+            - MYSQL_ROOT_PASSWORD=root 
+            - MYSQL_ROOT_HOST=%
+            - bind-address:0.0.0.0 
+    
+    usermanager:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: usermanager
+        networks: 
+            - appNET
+            - dbNET
+        ports: 
+            - 5000:80
+        environment: 
+            - DBHOST=mysql
+        depends_on: 
+            - mysql

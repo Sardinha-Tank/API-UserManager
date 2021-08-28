@@ -1,0 +1,54 @@
+name: Publish UserManager API
+
+on:
+  workflow_dispatch:
+  
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Publish UserManager API
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.400
+    - name: Install dependencies
+      run: dotnet restore
+    
+    - name: Build
+      run: dotnet build 'src/UserManager.API/UserManager.API.csproj' --configuration Release --no-restore
+    
+    - name: Test
+      run: dotnet test 'src/UserManager.Tests/UserManager.Tests.csproj' --no-restore --verbosity normal
+
+    - name: Publish
+      run: dotnet publish -c Release -o '${{ github.workspace }}/out'
+
+    - name: Zip Package
+      run: |
+        cd ${{ github.workspace }}/out
+        zip -r ${{ github.workspace }}/out.zip *
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        draft: false
+        prerelease: false
+
+    - name: Upload Release Asset
+      id: upload-release-asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ${{ github.workspace }}/out.zip
+        asset_name: /out.zip
+        asset_content_type: application/zip
